@@ -434,6 +434,11 @@ class Zend_Session extends Zend_Session_Abstract
         }
 
         if (self::$_sessionStarted) {
+            // Generate valid session id
+            if (self::$_regenerateIdState === -1) {
+                self::regenerateId();
+            }
+            
             return; // already started
         }
 
@@ -664,7 +669,7 @@ class Zend_Session extends Zend_Session_Abstract
         if (!self::$_unitTestEnabled && defined('SID')) {
             /** @see Zend_Session_Exception */
             require_once 'Zend/Session/Exception.php';
-            throw new Zend_Session_Exception('The session has already been started.  The session id must be set first.');
+            throw new Zend_Session_Exception('The session has already been started. The session id must be set first.');
         }
 
         if (!self::$_unitTestEnabled && headers_sent($filename, $linenum)) {
